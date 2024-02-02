@@ -1,24 +1,106 @@
 const db = require('./db/connection');
 const axios = require('axios');
 
-const createClient = () => {
-    axios.get('https://randomuser.me/api/')
-        .then((response) => {
-            const { name } = response.data.results[0];
-            const sql = `INSERT INTO clients (name,last_name, created_at) VALUES ('${name.first}','${name.last}', '2024-02-01 19:07:41')`;
-            db.query(sql, (err, result) => {
-                if (err) throw err;
-                console.log('Cliente creado!');
-                /*const sql = `INSERT INTO logs (description, time_stamp) VALUES ('Cliente creado', NOW())`;
-                db.query(sql, (err, result) => {
-                    if (err) throw err;
-                    console.log('Log creado!');
-                });*/
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
+const createPet = () => {
+	const pets = [
+		{
+			name: 'Firulais',
+			type: 'Perro',
+			breed: 'Pitbull',
+		},
+		{
+			name: 'Mishi',
+			type: 'Gato',
+			breed: 'Siames',
+		},
+		{
+			name: 'Lassie',
+			type: 'Perro',
+			breed: 'Collie',
+		},
+		{
+			name: 'Garfield',
+			type: 'Gato',
+			breed: 'Persa',
+		},
+		{
+			name: 'Scooby',
+			type: 'Perro',
+			breed: 'Gran Danes',
+		},
+		{
+			name: 'Tom',
+			type: 'Gato',
+			breed: 'Egipcio',
+		},
+		{
+			name: 'Pluto',
+			type: 'Perro',
+			breed: 'Dalmata',
+		},
+		{
+			name: 'Silvestre',
+			type: 'Gato',
+			breed: 'Angora',
+		},
+		{
+			name: 'Rex',
+			type: 'Perro',
+			breed: 'Pastor Aleman',
+		},
+		{
+			name: 'Felix',
+			type: 'Gato',
+			breed: 'Bengala',
+		},
+		{
+			name: 'Spike',
+			type: 'Perro',
+			breed: 'Bulldog',
+		},
+		{
+			name: 'Whiskers',
+			type: 'Gato',
+			breed: 'Ragdoll',
+		},
+		{
+			name: 'Max',
+			type: 'Perro',
+			breed: 'Husky',
+		},
+		{
+			name: 'Luna',
+			type: 'Gato',
+			breed: 'Siberiano',
+		},
+		{
+			name: 'Rocky',
+			type: 'Perro',
+			breed: 'Boxer',
+		},
+		{
+			name: 'Milo',
+			type: 'Gato',
+            breed: 'Siberiano'
+		},
+	];
 
-setInterval(createClient,5000);
+	const sql = `SELECT id FROM clients ORDER BY id`;
+
+	db.query(sql, (err, result) => {
+		if (err) throw err;
+
+		const randomId = Math.floor(Math.random() * result.length);
+		const randomPetIndex = Math.floor(Math.random() * pets.length);
+
+		const pet = pets[randomPetIndex];
+
+		const sql = `INSERT INTO pets (name, type, breed, owner_id) VALUES ('${pet.name}', '${pet.type}', '${pet.breed}', ${randomId})`;
+		db.query(sql, (err, result) => {
+			if (err) throw err;
+			console.log('Mascota creada!');
+		});
+	});
+};
+
+setInterval(createPet, 5000);
